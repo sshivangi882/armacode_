@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL-EVENT</title>
+    <style>
+        :root {
+            --primary-blue: #0072ff;
+            --light-blue: #f0f8ff;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333333;
+            --medium-gray: #999999;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--light-blue);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color : var(--primary-blue);
+            color : var(--white);
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .dashboard-container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 1rem auto;
+            padding: 0 0.5rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .dashboard-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            header {
+                padding: 1.5rem;
+            }
+            
+            .dashboard-container {
+                margin: 1.5rem auto;
+                padding: 0;
+            }
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary-blue);
+        }
+        
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        @media (min-width: 768px) {
+            .card {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (min-width: 576px) {
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        @media (min-width: 576px) {
+            .stat-card {
+                padding: 1.5rem;
+            }
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin: 0.5rem 0;
+        }
+        
+        @media (min-width: 576px) {
+            .stat-value {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .stat-label {
+            color: var(--medium-gray);
+            font-size: 0.875rem;
+        }
+        
+        @media (min-width: 576px) {
+            .stat-label {
+                font-size: 1rem;
+            }
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 992px) {
+            .charts-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+        }
+        
+        .chart-container {
+            height: 250px;
+            width: 100%;
+            position: relative;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            min-width: 650px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 0.875rem;
+        }
+        
+        @media (min-width: 768px) {
+            .data-table th, .data-table td {
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+        }
+        
+        .data-table th {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+        
+        .data-table tr:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .filter-bar {
+                gap: 1rem;
+                margin-bottom: 0;
+                width: auto;
+            }
+        }
+        
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            background-color: var(--white);
+            width: 100%;
+        }
+        
+        @media (min-width: 576px) {
+            .filter-select {
+                width: auto;
+            }
+        }
+        
+        footer {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            text-align: center;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .positive-change {
+            color: #28a745;
+        }
+        
+        .negative-change {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Data Analytics Dashboard</h1>
+    </header>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h2>Performance Overview</h2>
+                <p>Data insights for March 2025</p>
+            </div>
+            <div class="filter-bar">
+                <select class="filter-select" id="date-range">
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month" selected>This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                </select>
+                <select class="filter-select" id="data-category">
+                    <option value="all" selected>All Categories</option>
+                    <option value="sales">Sales</option>
+                    <option value="traffic">Traffic</option>
+                    <option value="engagement">Engagement</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="card stat-card">
+                <span class="stat-label">Total Visitors</span>
+                <div class="stat-value">24,582</div>
+                <span class="stat-label"><span class="positive-change">↑ 12.3%</span> from last period</span>
+            </div>
+            <div class="card stat-card">
+                <span class="stat-label">Conversion Rate</span>
+                <div class="stat-value">3.8%</div>
+                <span class="stat-label"><span class="positive-change">↑ 0.5%</span> from last period</span>
+            </div>
+            <div class="card stat-card">
+                <span class="stat-label">Avg. Session Duration</span>
+                <div class="stat-value">4:32</div>
+                <span class="stat-label"><span class="negative-change">↓ 0.12%</span> from last period</span>
+            </div>
+            <div class="card stat-card">
+                <span class="stat-label">Bounce Rate</span>
+                <div class="stat-value">39%</div>
+                <span class="stat-label"><span class="positive-change">↓ 2.7%</span> from last period</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Monthly Sales Performance</h2>
+            <div class="chart-container">
+                <canvas id="sales-bar-chart"></canvas>
+            </div>
+        </div>
+        
+        <div class="charts-grid">
+            <div class="card">
+                <h2>Visitor Traffic Trends</h2>
+                <div class="chart-container">
+                    <canvas id="traffic-chart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Traffic Sources</h2>
+                <div class="chart-container">
+                    <canvas id="sources-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Top Pages</h2>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Page URL</th>
+                            <th>Page Views</th>
+                            <th>Unique Visitors</th>
+                            <th>Avg. Time on Page</th>
+                            <th>Bounce Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/home</td>
+                            <td>8,321</td>
+                            <td>6,540</td>
+                            <td>2:45</td>
+                            <td>32%</td>
+                        </tr>
+                        <tr>
+                            <td>/products</td>
+                            <td>5,432</td>
+                            <td>4,102</td>
+                            <td>3:50</td>
+                            <td>28%</td>
+                        </tr>
+                        <tr>
+                            <td>/about</td>
+                            <td>2,543</td>
+                            <td>2,129</td>
+                            <td>1:34</td>
+                            <td>45%</td>
+                        </tr>
+                        <tr>
+                            <td>/contact</td>
+                            <td>1,893</td>
+                            <td>1,562</td>
+                            <td>2:12</td>
+                            <td>39%</td>
+                        </tr>
+                        <tr>
+                            <td>/blog/latest-update</td>
+                            <td>1,654</td>
+                            <td>1,423</td>
+                            <td>4:20</td>
+                            <td>25%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Your Company Name. All rights reserved.</p>
+    </footer>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bar Chart for Monthly Sales
+            const salesBarCtx = document.getElementById('sales-bar-chart').getContext('2d');
+            const salesBarChart = new Chart(salesBarCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        label: 'Monthly Sales ($)',
+                        data: [45000, 52000, 49000, 61000, 58000, 63000, 65000, 68000, 72000, 78000],
+                        backgroundColor: '#0072ff',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                },
+                                maxTicksLimit: window.innerWidth < 768 ? 5 : 10
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: window.innerWidth < 576 ? 5 : 10
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Traffic Line Chart
+            const trafficCtx = document.getElementById('traffic-chart').getContext('2d');
+            const trafficChart = new Chart(trafficCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        label: 'Monthly Visitors',
+                        data: [15000, 17500, 19800, 21200, 19500, 22300, 25600, 23900, 21700, 24582],
+                        fill: true,
+                        backgroundColor: 'rgba(0, 114, 255, 0.1)',
+                        borderColor: '#0072ff',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                maxTicksLimit: window.innerWidth < 768 ? 5 : 10
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: window.innerWidth < 576 ? 5 : 10
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Sources Doughnut Chart
+            const sourcesCtx = document.getElementById('sources-chart').getContext('2d');
+            const sourcesChart = new Chart(sourcesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Direct', 'Organic Search', 'Social Media', 'Referral', 'Email'],
+                    datasets: [{
+                        data: [35, 28, 17, 12, 8],
+                        backgroundColor: [
+                            '#0072ff',
+                            '#36a2eb',
+                            '#4cc9f0',
+                            '#90e0ef',
+                            '#caf0f8'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: window.innerWidth < 576 ? 'bottom' : 'right',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 15,
+                                font: {
+                                    size: window.innerWidth < 576 ? 10 : 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Function to update chart configurations based on screen size
+            function updateChartsForScreenSize() {
+                // Update legend position for sources chart
+                sourcesChart.options.plugins.legend.position = window.innerWidth < 576 ? 'bottom' : 'right';
+                sourcesChart.options.plugins.legend.labels.font.size = window.innerWidth < 576 ? 10 : 12;
+                
+                // Update tick configurations for bar and line charts
+                const tickLimit = window.innerWidth < 576 ? 5 : 10;
+                salesBarChart.options.scales.y.ticks.maxTicksLimit = tickLimit;
+                salesBarChart.options.scales.x.ticks.maxTicksLimit = tickLimit;
+                trafficChart.options.scales.y.ticks.maxTicksLimit = tickLimit;
+                trafficChart.options.scales.x.ticks.maxTicksLimit = tickLimit;
+                
+                // Update all charts
+                salesBarChart.update();
+                trafficChart.update();
+                sourcesChart.update();
+            }
+            
+            // Initial setup
+            updateChartsForScreenSize();
+            
+            // Update charts on window resize
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    updateChartsForScreenSize();
+                }, 250);
+            });
+        });
+    </script>
+</body>
+</html>

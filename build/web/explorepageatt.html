@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL-EVENT</title>
+    <style>
+        :root {
+            --primary: #0072ff;
+            --primary-light: #4a99ff;
+            --primary-dark: #005ecc;
+            --secondary: #f59e0b;
+            --white: #ffffff;
+            --black: #111827;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-700);
+            background-color: var(--gray-100);
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-dark);
+            padding: 1rem;
+        }
+        
+        .nav-menu.active {
+            display: block;
+        }
+        
+        .nav-menu ul {
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-menu {
+                display: block;
+                position: static;
+                background-color: transparent;
+                padding: 0;
+            }
+            
+            .nav-menu ul {
+                display: flex;
+                gap: 1.5rem;
+            }
+            
+            .nav-menu li {
+                margin-bottom: 0;
+            }
+        }
+        
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .page-title {
+            margin: 1rem 0;
+            font-size: 1.8rem;
+            color: var(--gray-700);
+        }
+        
+        .filter-section {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border-top: 3px solid var(--primary);
+        }
+        
+        .filters-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .toggle-filters {
+            display: block;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        @media (min-width: 768px) {
+            .toggle-filters {
+                display: none;
+            }
+        }
+        
+        .filters-content {
+            display: none;
+        }
+        
+        .filters-content.active {
+            display: block;
+        }
+        
+        @media (min-width: 768px) {
+            .filters-content {
+                display: block;
+            }
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 576px) {
+            .filter-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .filter-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .filter-group {
+            margin-bottom: 1rem;
+        }
+        
+        .filter-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .filter-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+        
+        .search-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        .search-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        @media (min-width: 768px) {
+            .search-btn {
+                width: auto;
+            }
+        }
+        
+        .event-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 576px) {
+            .event-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .event-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .event-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .event-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .event-image {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .event-details {
+            padding: 1rem;
+        }
+        
+        .event-category {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--white);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+        }
+        
+        .event-info {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .event-icon {
+            color: var(--primary);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--gray-700);
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 4px;
+        }
+        
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .tag {
+            background-color: var(--gray-200);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            border: 1px solid transparent;
+        }
+        
+        .tag:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .tag.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .load-more {
+            display: block;
+            margin: 2rem auto;
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.75rem 2rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        .load-more:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+        
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        
+        .footer-column {
+            flex: 1;
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: var(--radius) 0 0 var(--radius);
+            font-size: 0.875rem;
+        }
+
+        .newsletter-btn {
+            background-color: var(--primary-light);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .newsletter-btn:hover {
+            background-color: var(--primary);
+        }
+        a{
+            padding: 5px;
+            background-color: blue;
+            border: 1px #4197f3 none;
+            border-radius: 10px;
+            color : white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">REL-EVENT</div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+            <nav class="nav-menu" id="nav-menu">
+                <ul>
+                    <li><a href="index.jsp">Home</a></li>
+                    <!--<li><a href="">Events</a></li>-->
+                   
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <h1 class="page-title">Discover Events</h1>
+        
+        <section class="filter-section">
+            <div class="filters-title">
+                <span>Event Filters</span>
+                <button class="toggle-filters" id="toggle-filters">▼</button>
+            </div>
+            <div class="filters-content" id="filters-content">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label class="filter-label" for="category">Category</label>
+                        <select class="filter-input" id="category">
+                            <option value="">All Categories</option>
+                            <option value="music">Music & Concerts</option>
+                            <option value="sports">Sports</option>
+                            <option value="arts">Arts & Theater</option>
+                            <option value="food">Food & Drink</option>
+                            <option value="business">Business & Networking</option>
+                            <option value="workshops">Workshops</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label" for="location">Location</label>
+                        <input type="text" class="filter-input" id="location" placeholder="City or Zip Code">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label" for="date-from">Date From</label>
+                        <input type="date" class="filter-input" id="date-from">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label" for="date-to">Date To</label>
+                        <input type="date" class="filter-input" id="date-to">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label" for="keywords">Keywords</label>
+                    <input type="text" class="filter-input" id="keywords" placeholder="Search by event name, artist, venue...">
+                </div>
+                
+                <button class="search-btn">Search Events</button>
+            </div>
+        </section>
+        
+        <div class="tag-cloud">
+            <span class="tag active">All</span>
+            <span class="tag">This Weekend</span>
+            <span class="tag">Free</span>
+            <span class="tag">Music</span>
+            <span class="tag">Outdoors</span>
+            <span class="tag">Family-Friendly</span>
+            <span class="tag">Food & Drink</span>
+        </div>
+        
+        <section>
+            <h2 class="section-title">Popular Events</h2>
+            <div class="event-grid">
+                <div class="event-card">
+                    <div class="featured-badge">Hot Event</div>
+                    <img src="./assets/summer-event.jpg" alt="Summer Festival" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Music</span>
+                        <h3 class="event-title">Summer Music Festival</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> March 25, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> Central Park</p>
+                        <p class="event-info"><span class="event-icon">💲</span> $45 - $120</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <img src="./assets/Food-Festival.jpg" alt="Food Festival" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Food & Drink</span>
+                        <h3 class="event-title">International Food Festival</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> April 2-3, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> Downtown Plaza</p>
+                        <p class="event-info"><span class="event-icon">💲</span> $15</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <div class="featured-badge">Featured</div>
+                    <img src="./assets/tech conference.jpg" alt="Tech Conference" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Business</span>
+                        <h3 class="event-title">Future Tech Conference</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> March 30, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> Convention Center</p>
+                        <p class="event-info"><span class="event-icon">💲</span> $199</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <img src="./assets/Modern Art Exhibition.jpg" alt="Art Exhibition" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Arts</span>
+                        <h3 class="event-title">Modern Art Exhibition</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> March 28 - April 10, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> City Gallery</p>
+                        <p class="event-info"><span class="event-icon">💲</span> Free</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Nearby Recommendations</h2>
+            <div class="event-grid">
+                <div class="event-card">
+                    <img src="./assets/Live Jazz Night.jpg" alt="Live Concert" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Music</span>
+                        <h3 class="event-title">Live Jazz Night</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> March 24, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> Blue Note Club</p>
+                        <p class="event-info"><span class="event-icon">💲</span> $35</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <img src="./assets/Italian Cooking Class.jpg" alt="Cooking Workshop" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Workshops</span>
+                        <h3 class="event-title">Italian Cooking Class</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> March 26, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> Culinary Institute</p>
+                        <p class="event-info"><span class="event-icon">💲</span> $75</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <img src="./assets/Stand-up Comedy Night.jpg" alt="Comedy Show" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Arts</span>
+                        <h3 class="event-title">Stand-up Comedy Night</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> March 29, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> Laugh Factory</p>
+                        <p class="event-info"><span class="event-icon">💲</span> $25 - $40</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+                
+                <div class="event-card">
+                    <img src="./assets/Outdoor Yoga Session.jpg" alt="Yoga Class" class="event-image">
+                    <div class="event-details">
+                        <span class="event-category">Workshops</span>
+                        <h3 class="event-title">Outdoor Yoga Session</h3>
+                        <p class="event-info"><span class="event-icon">📅</span> March 25, 2025</p>
+                        <p class="event-info"><span class="event-icon">📍</span> Riverfront Park</p>
+                        <p class="event-info"><span class="event-icon">💲</span> $10</p>
+                        <a href="#">RSPV</a>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="load-more">Load More Events</button>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3 class="footer-title">EventFinder</h3>
+                <p>Discover and attend the best events in your area. Find concerts, workshops, sports events, and more.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" class="newsletter-input">
+                    <button class="newsletter-btn">Subscribe</button>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Search Events</a></li>
+                    <li><a href="#">Create an Event</a></li>
+                    <li><a href="#">My Tickets</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Music & Concerts</a></li>
+                    <li><a href="#">Sports</a></li>
+                    <li><a href="#">Arts & Theater</a></li>
+                    <li><a href="#">Food & Drink</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Partner With Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 EventFinder. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navMenu = document.getElementById('nav-menu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+            
+            // Filters toggle on mobile
+            const toggleFiltersBtn = document.getElementById('toggle-filters');
+            const filtersContent = document.getElementById('filters-content');
+            
+            toggleFiltersBtn.addEventListener('click', function() {
+                filtersContent.classList.toggle('active');
+                toggleFiltersBtn.textContent = filtersContent.classList.contains('active') ? '▲' : '▼';
+            });
+            
+            // Category tags
+            const tags = document.querySelectorAll('.tag');
+            
+            tags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Remove active class from all tags
+                    tags.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tag
+                    this.classList.add('active');
+                });
+            });
+            
+            // Initialize date inputs with default values
+            const dateFrom = document.getElementById('date-from');
+            const dateTo = document.getElementById('date-to');
+            
+            const today = new Date();
+            const oneMonthLater = new Date();
+            oneMonthLater.setMonth(today.getMonth() + 1);
+            
+            dateFrom.valueAsDate = today;
+            dateTo.valueAsDate = oneMonthLater;
+            
+            // Detect user's location (simplified for demo)
+            if ("geolocation" in navigator) {
+                const locationInput = document.getElementById('location');
+                if (!locationInput.value) {
+                    locationInput.placeholder = "Detecting your location...";
+                    
+                    // In a real app, you would actually get the location
+                    // For demo purposes, we'll just simulate it after a delay
+                    setTimeout(() => {
+                        locationInput.placeholder = "City or Zip Code";
+                        locationInput.value = "New York, NY";
+                    }, 1500);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

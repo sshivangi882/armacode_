@@ -1,0 +1,17 @@
+SMAP
+landing_002dpage_jsp.java
+JSP
+*S JSP
+*F
++ 0 navbar.jsp
+navbar.jsp
++ 1 landing-page.jsp
+landing-page.jsp
+*L
+5,51:49
+1#1,161:100
+162:261,5
+163,9:266
+172:275,3
+173,80:278
+*E
