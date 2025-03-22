@@ -1,10 +1,10 @@
 Description
 
-ArmaCode is a Java-based application developed using NetBeans IDE. The project is structured with multiple modules, utilizing Java’s robust capabilities for software development. It includes source code, configuration files, and build scripts that facilitate compilation, testing, and execution.
+REL_EVENT is a Java-based application developed using NetBeans IDE. The project is structured with multiple modules, utilizing Java’s robust capabilities for software development. It includes source code, configuration files, and build scripts that facilitate compilation, testing, and execution.
 
 The project adheres to best software development practices, making it easy to maintain and extend. It is designed for scalability and modularity, ensuring that new features can be integrated seamlessly.
 
-Features
+*Features*
 
 Modular Java architecture - Organized packages for maintainability and scalability.
 
@@ -18,9 +18,9 @@ Structured source code (src/) - Well-organized Java classes following standard c
 
 Dedicated testing directory (test/) - Allows implementation of unit and integration tests.
 
-Project Structure
-
-- ArmaCode/
+*Project Structure*
+<p style="color:blue; font-size:20px; font-weight:bold;">
+     - ArmaCode/
   - .git/                  # Git repository configuration
   - .gitignore             # Files ignored by Git (build artifacts, IDE settings, etc.)
   - README.md              # Project documentation
@@ -35,12 +35,16 @@ Project Structure
   - test/                  # Test cases directory (if present)
   - lib/                   # External libraries (if required)
   - dist/                  # Compiled binaries and JAR files (post-build output)
+
+
+</p>
+ 
  
     Installation
 
 To set up and run ArmaCode, follow these steps:
 
-Prerequisites
+*Prerequisites*
 
 Java Development Kit (JDK) 8 or later
 
@@ -81,8 +85,7 @@ If external libraries are needed, place them inside the lib/ directory.
 Run tests located in the test/ directory before deploying any changes.
 
 
-
-Contribution Guidelines
+*Contribution Guidelines*
 
 Fork the repository and create a feature branch.
 
