@@ -36,6 +36,16 @@ Dedicated testing directory (test/) - Allows implementation of unit and integrat
   - lib/                   # External libraries (if required)
   - dist/                  # Compiled binaries and JAR files (post-build output)
 
+
+**APIs Used**
+
+ArmaCode integrates various APIs to enhance functionality:
+
+JavaMail API - Facilitates email communication within the application.
+
+SMTP (Simple Mail Transfer Protocol) - Used for sending email notifications.
+
+OpenStreetMap API - Enables mapping and location-based features.
  
     Installation
 
